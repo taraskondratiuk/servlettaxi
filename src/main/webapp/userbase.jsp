@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: shaur
-  Date: 27.05.2019
-  Time: 15:42
+  Date: 29.05.2019
+  Time: 13:49
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -11,7 +11,7 @@
     <title>Title</title>
 </head>
 <body>
-login page
-<a href="${pageContext.request.contextPath}/index.jsp">back</a>
+user base
+<a href="${pageContext.request.contextPath}/logout">logout</a>
 </body>
 </html>

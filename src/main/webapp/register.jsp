@@ -12,6 +12,6 @@
 </head>
 <body>
 register
-<a href="index.jsp">main page</a>
+<a href="${pageContext.request.contextPath}/index.jsp">main page</a>
 </body>
 </html>

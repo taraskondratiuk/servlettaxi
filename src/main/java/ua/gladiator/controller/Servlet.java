@@ -2,6 +2,7 @@ package ua.gladiator.controller;
 
 import ua.gladiator.controller.command.Command;
 import ua.gladiator.controller.command.Login;
+import ua.gladiator.controller.command.Logout;
 import ua.gladiator.controller.command.Register;
 
 import javax.servlet.ServletException;
@@ -19,6 +20,7 @@ public class Servlet extends HttpServlet {
     public void init(){
         commands.put("login", new Login());
         commands.put("register", new Register());
+        commands.put("logout", new Logout());
 
     }
     @Override
@@ -27,18 +29,21 @@ public class Servlet extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        System.out.println("servlet work");
         String path = req.getRequestURI();
         System.out.println(path);
         //path = path.replaceAll("\\.jsp" , "");
         path = path.replaceAll(".*/taxi/","");
-        //System.out.println(path);
+        path = path.replaceAll("\\.jsp","");
+        System.out.println("path " + path);
         Command command = commands.getOrDefault(path ,
                 (r)->"/index.jsp");
         System.out.println(command);
         String page = command.execute(req);
         System.out.println("LSDLKFJLKSDGJ" + page);
         //if(page.contains("redirect")){
-        //    resp.sendRedirect(page.replace("redirect:", "/api"));
+
+            //resp.sendRedirect(page.replace("redirect", ""));
         //}else {
         //ServletOutputStream out = resp.getOutputStream();
         //out.println("<h3>Text of ForwardDemoServlet</h3>");
