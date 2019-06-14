@@ -25,11 +25,11 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<Car> getAvailable() {
-        return null;
+        return carDao.findAvailable();
     }
 
     @Override
     public List<Car> getAvailableType(CarType type) {
-        return null;
+        return carDao.findAvailableByType(String.valueOf(type));
     }
 }

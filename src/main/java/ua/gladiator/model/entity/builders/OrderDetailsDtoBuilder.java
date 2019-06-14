@@ -29,13 +29,13 @@ public class OrderDetailsDtoBuilder {
         return this;
     }
 
-    public OrderDetailsDtoBuilder buildInitPlace(String initPlace) {
-        this.initPlace = Street.valueOf(initPlace);
+    public OrderDetailsDtoBuilder buildInitPlace(Street initPlace) {
+        this.initPlace = initPlace;
         return this;
     }
 
-    public OrderDetailsDtoBuilder buildDestPlace(String destPlace) {
-        this.destPlace = Street.valueOf(destPlace);
+    public OrderDetailsDtoBuilder buildDestPlace(Street destPlace) {
+        this.destPlace = destPlace;
         return this;
     }
 

@@ -3,12 +3,10 @@ package ua.gladiator.model.dao.impl;
 import ua.gladiator.model.dao.DiscountDao;
 import ua.gladiator.model.dao.mapper.ClientMapper;
 import ua.gladiator.model.dao.mapper.DiscountMapper;
+import ua.gladiator.model.entity.Client;
 import ua.gladiator.model.entity.Discount;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -36,16 +34,18 @@ public class JDBCDiscountDao implements DiscountDao {
     }
 
     @Override
-    public Integer getPersonal() {
+    public Integer getPersonal(Client client) {
         Integer pers = 0;
-        try (Statement statement = connection.createStatement()){
-            ResultSet resultSet = statement.executeQuery(rb.getString("discount.getpersonal"));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                rb.getString("discount.getpersonal"))) {
+            preparedStatement.setLong(1, client.getTotalSpentValue());
+            preparedStatement.setString(2, client.getSocialStatus().toString());
+
 
             if (resultSet.next()) {
                 pers += resultSet.getInt("personal");
             }
-
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return pers;

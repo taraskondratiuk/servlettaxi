@@ -3,6 +3,7 @@ package ua.gladiator.model.dao.impl;
 import ua.gladiator.model.dao.CarDao;
 import ua.gladiator.model.dao.mapper.CarMapper;
 import ua.gladiator.model.entity.Car;
+import ua.gladiator.model.entity.enums.CarType;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -57,17 +58,20 @@ public class JDBCCarDao implements CarDao {
         return list;
     }
 
+
+
     @Override
     public void create(Car entity) {
 
     }
 
+
     @Override
-    public Car findById(int id) {
+    public Car findById(Long id) {
         Car car = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 rb.getString("car.findid"))) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setLong(1, id);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 car =  carMapper.extractFromResultSet(resultSet);

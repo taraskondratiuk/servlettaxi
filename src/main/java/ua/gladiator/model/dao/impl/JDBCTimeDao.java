@@ -62,11 +62,11 @@ public class JDBCTimeDao implements TimeDao {
     }
 
     @Override
-    public Time findById(int id) {
+    public Time findById(Long id) {
         Time time = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 rb.getString("time.findtimebyid"))) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setLong(1, id);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 time =  timeMapper.extractFromResultSet(resultSet);

@@ -67,23 +67,25 @@ public class JDBCClientDao implements ClientDao {
     }
 
     @Override
-    public void changepw(String password, String login) {
+    public void changepw(String oldPassword, String newPassword, String login) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 rb.getString("client.changepw"))) {
-            preparedStatement.setString(1, password);
-            preparedStatement.setString(2, login);
+            preparedStatement.setString(1, newPassword);
+            preparedStatement.setString(2, oldPassword);
+            preparedStatement.setString(3, login);
             resultSet = preparedStatement.executeQuery();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+
     @Override
-    public void updateDiscount(Integer discount, Long id) {
+    public void updateDiscount(Integer discount, String login) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 rb.getString("client.updatediscount"))) {
             preparedStatement.setInt(1, discount);
-            preparedStatement.setLong(2, id);
+            preparedStatement.setString(2, login);
             resultSet = preparedStatement.executeQuery();
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,7 +98,19 @@ public class JDBCClientDao implements ClientDao {
 
     @Override
     public void create(Client entity) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                rb.getString("client.create"))) {
+            preparedStatement.setString(1, entity.getLogin());
+            preparedStatement.setString(2, entity.getPassword());
+            preparedStatement.setInt(3, entity.getPersonalDiscount());
+            preparedStatement.setString(4, entity.getRole().toString());
+            preparedStatement.setString(5, entity.getSocialStatus().toString());
+            preparedStatement.setLong(6, entity.getTotalSpentValue());
 
+            resultSet = preparedStatement.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
