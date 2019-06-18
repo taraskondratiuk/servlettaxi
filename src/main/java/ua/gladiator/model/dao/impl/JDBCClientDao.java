@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 public class JDBCClientDao implements ClientDao {
     private Connection connection;
     private ResultSet resultSet;
-    private ClientMapper clientMapper;
+    private ClientMapper clientMapper = new ClientMapper();
 
     private static ResourceBundle rb = ResourceBundle.getBundle("properties.db", new Locale("en", "US"));
 
@@ -59,7 +59,7 @@ public class JDBCClientDao implements ClientDao {
                 rb.getString("client.updatespentval"))) {
             preparedStatement.setLong(1, additionalValue);
             preparedStatement.setLong(2, id);
-            resultSet = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,7 +73,7 @@ public class JDBCClientDao implements ClientDao {
             preparedStatement.setString(1, newPassword);
             preparedStatement.setString(2, oldPassword);
             preparedStatement.setString(3, login);
-            resultSet = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,7 +86,7 @@ public class JDBCClientDao implements ClientDao {
                 rb.getString("client.updatediscount"))) {
             preparedStatement.setInt(1, discount);
             preparedStatement.setString(2, login);
-            resultSet = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -107,14 +107,14 @@ public class JDBCClientDao implements ClientDao {
             preparedStatement.setString(5, entity.getSocialStatus().toString());
             preparedStatement.setLong(6, entity.getTotalSpentValue());
 
-            resultSet = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public Client findById(int id) {
+    public Client findById(Long id) {
         return null;
     }
 
@@ -130,7 +130,7 @@ public class JDBCClientDao implements ClientDao {
 
 
         try (Statement statement = connection.createStatement()){
-            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
                 clients.add(clientMapper.extractFromResultSet(resultSet));
@@ -148,7 +148,30 @@ public class JDBCClientDao implements ClientDao {
     }
 
     @Override
+    public Boolean isRegistered(String login, String password) {
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                rb.getString("client.findreg"))) {
+            preparedStatement.setString(1, login);
+            preparedStatement.setString(2, password);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
     public void close() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
 
     }
 }

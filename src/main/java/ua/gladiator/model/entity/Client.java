@@ -4,6 +4,20 @@ import ua.gladiator.model.entity.enums.Role;
 import ua.gladiator.model.entity.enums.SocialStatus;
 
 public class Client {
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", socialStatus=" + socialStatus +
+                ", totalSpentValue=" + totalSpentValue +
+                ", role=" + role +
+                ", personalDiscount=" + personalDiscount +
+                '}';
+    }
+
     private Long id;
 
     private String login;

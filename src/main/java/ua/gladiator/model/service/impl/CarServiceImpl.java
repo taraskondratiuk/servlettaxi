@@ -9,27 +9,40 @@ import ua.gladiator.model.service.CarService;
 import java.util.List;
 
 public class CarServiceImpl implements CarService {
-
     private DaoFactory daoFactory = DaoFactory.getInstance();
-    private CarDao carDao = daoFactory.createCarDao();
-
     @Override
     public Car getCarById(Long carId) {
-        return null;
+
+        CarDao carDao = daoFactory.createCarDao();
+        Car car = carDao.findById(carId);
+        carDao.close();
+        return car;
     }
 
     @Override
     public List<Car> getAll() {
-        return carDao.findAll();
+
+        CarDao carDao = daoFactory.createCarDao();
+        List<Car> cars = carDao.findAll();
+        carDao.close();
+        return cars;
     }
 
     @Override
     public List<Car> getAvailable() {
-        return carDao.findAvailable();
+
+        CarDao carDao = daoFactory.createCarDao();
+        List<Car> cars = carDao.findAvailable();
+        carDao.close();
+        return cars;
     }
 
     @Override
     public List<Car> getAvailableType(CarType type) {
-        return carDao.findAvailableByType(String.valueOf(type));
+
+        CarDao carDao = daoFactory.createCarDao();
+        List<Car> cars = carDao.findAvailableByType(String.valueOf(type));
+        carDao.close();
+        return cars;
     }
 }

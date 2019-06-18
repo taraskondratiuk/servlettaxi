@@ -40,6 +40,11 @@ public class ClientBuilder {
         return this;
     }
 
+    public ClientBuilder buildSocialStatus(SocialStatus socialStatus) {
+        this.socialStatus = socialStatus;
+        return this;
+    }
+
     public ClientBuilder buildTotalSpentValue(Long totalSpentValue) {
         this.totalSpentValue = totalSpentValue;
         return this;

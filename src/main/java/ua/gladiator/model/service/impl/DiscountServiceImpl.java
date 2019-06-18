@@ -3,19 +3,39 @@ package ua.gladiator.model.service.impl;
 import ua.gladiator.model.dao.DaoFactory;
 import ua.gladiator.model.dao.DiscountDao;
 import ua.gladiator.model.entity.Client;
+import ua.gladiator.model.entity.enums.SocialStatus;
 import ua.gladiator.model.service.DiscountService;
 
 public class DiscountServiceImpl implements DiscountService {
-    private DaoFactory daoFactory = DaoFactory.getInstance();
-    private DiscountDao discountDao = daoFactory.createDiscountDao();
+
 
     @Override
     public Integer getClientDiscount(Client client) {
-        return discountDao.getPersonal(client);
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        DiscountDao discountDao = daoFactory.createDiscountDao();
+        Integer discount = discountDao.getPersonal(client);
+        discountDao.close();
+        return discount;
+    }
+
+    @Override
+    public Integer getClientDiscount(Long totalSpentValue, SocialStatus socialStatus) {
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        DiscountDao discountDao = daoFactory.createDiscountDao();
+        Integer discount = discountDao.getPersonal(totalSpentValue, socialStatus);
+        discountDao.close();
+        return discount;
     }
 
     @Override
     public Integer getSpecialDiscount() {
-        return discountDao.getSpecial();
+
+        DaoFactory daoFactory = DaoFactory.getInstance();
+
+        DiscountDao discountDao = daoFactory.createDiscountDao();
+
+        Integer discount = discountDao.getSpecial();
+
+        return discount;
     }
 }

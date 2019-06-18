@@ -7,6 +7,7 @@ import ua.gladiator.model.entity.Time;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -14,7 +15,7 @@ import java.util.ResourceBundle;
 public class JDBCTimeDao implements TimeDao {
     private Connection connection;
     private ResultSet resultSet;
-    private TimeMapper timeMapper;
+    private TimeMapper timeMapper = new TimeMapper();
 
     private static ResourceBundle rb = ResourceBundle.getBundle("properties.db", new Locale("en", "US"));
 
@@ -94,6 +95,12 @@ public class JDBCTimeDao implements TimeDao {
 
     @Override
     public void close() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
 
     }
 }

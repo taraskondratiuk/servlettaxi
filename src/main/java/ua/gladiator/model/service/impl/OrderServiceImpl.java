@@ -9,21 +9,31 @@ import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
 
-    private DaoFactory daoFactory = DaoFactory.getInstance();
-    private OrderDao orderDao = daoFactory.createOrderDao();
+
 
     @Override
     public void addOrder(Order order) {
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        OrderDao orderDao = daoFactory.createOrderDao();
         orderDao.create(order);
+        orderDao.close();
     }
 
     @Override
     public List<Order> getRidesByClientId(Long id) {
-        return orderDao.findByClientId(id);
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        OrderDao orderDao = daoFactory.createOrderDao();
+        List<Order> orders = orderDao.findByClientId(id);
+        orderDao.close();
+        return orders;
     }
 
     @Override
     public Integer getNumRides(Long id) {
-        return orderDao.countByClientId(id);
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        OrderDao orderDao = daoFactory.createOrderDao();
+        Integer num = orderDao.countByClientId(id);
+        orderDao.close();
+        return num;
     }
 }

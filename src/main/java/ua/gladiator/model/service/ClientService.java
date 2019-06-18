@@ -15,11 +15,13 @@ public interface ClientService {
     void registerClient(Client client);
 
     void addToSpentValue(Long id, Long value);
-    Client getCurrentClient();
+    Client getClient(String login);
     boolean isRegistered(Long id);
     boolean isRegistered(Client client);
+    boolean isRegistered(String login, String password);
 
     void changePassword(String oldPassword, String newPassword, String login);
+
 
     void refreshDiscount(Integer newDiscount, String login);
 }

@@ -8,5 +8,6 @@ public interface ClientDao extends GenericDao<Client> {
     void updateSpentVal(Long id, Long additionalValue);
     void changepw(String oldPassword, String newPassword, String login);
     void updateDiscount(Integer discount, String login);
+    Boolean isRegistered(String login, String password);
 
 }

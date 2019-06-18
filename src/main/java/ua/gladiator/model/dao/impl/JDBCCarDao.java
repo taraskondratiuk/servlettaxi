@@ -14,7 +14,8 @@ import java.util.ResourceBundle;
 public class JDBCCarDao implements CarDao {
     private Connection connection;
     private ResultSet resultSet;
-    private CarMapper carMapper;
+    private CarMapper carMapper = new CarMapper();
+
 
     private static ResourceBundle rb = ResourceBundle.getBundle("properties.db", new Locale("en", "US"));
 
@@ -28,7 +29,7 @@ public class JDBCCarDao implements CarDao {
         final String sql = rb.getString("car.findavail");
 
         try (Statement statement = connection.createStatement()){
-            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery(sql);
 
             CarMapper carMapper = new CarMapper();
 
@@ -87,7 +88,7 @@ public class JDBCCarDao implements CarDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 rb.getString("car.delete"))) {
             preparedStatement.setInt(1, id);
-            resultSet = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,7 +102,7 @@ public class JDBCCarDao implements CarDao {
 
 
         try (Statement statement = connection.createStatement()){
-            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery(sql);
 
             CarMapper carMapper = new CarMapper();
 
@@ -122,6 +123,12 @@ public class JDBCCarDao implements CarDao {
 
     @Override
     public void close() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
 
     }
 }

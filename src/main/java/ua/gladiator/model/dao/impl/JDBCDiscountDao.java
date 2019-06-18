@@ -5,6 +5,7 @@ import ua.gladiator.model.dao.mapper.ClientMapper;
 import ua.gladiator.model.dao.mapper.DiscountMapper;
 import ua.gladiator.model.entity.Client;
 import ua.gladiator.model.entity.Discount;
+import ua.gladiator.model.entity.enums.SocialStatus;
 
 import java.sql.*;
 import java.util.List;
@@ -14,14 +15,14 @@ import java.util.ResourceBundle;
 public class JDBCDiscountDao implements DiscountDao {
     private Connection connection;
     private ResultSet resultSet;
-    private DiscountMapper discountMapper;
+    private DiscountMapper discountMapper = new DiscountMapper();
 
     private static ResourceBundle rb = ResourceBundle.getBundle("properties.db", new Locale("en", "US"));
     @Override
     public Integer getSpecial() {
         Integer spec = 0;
         try (Statement statement = connection.createStatement()){
-            ResultSet resultSet = statement.executeQuery(rb.getString("discount.getspecial"));
+            resultSet = statement.executeQuery(rb.getString("discount.getspecial"));
 
             while (resultSet.next()) {
                 spec += resultSet.getInt("discount");
@@ -40,7 +41,25 @@ public class JDBCDiscountDao implements DiscountDao {
                 rb.getString("discount.getpersonal"))) {
             preparedStatement.setLong(1, client.getTotalSpentValue());
             preparedStatement.setString(2, client.getSocialStatus().toString());
+            resultSet = preparedStatement.executeQuery();
 
+            if (resultSet.next()) {
+                pers += resultSet.getInt("personal");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return pers;
+    }
+
+    @Override
+    public Integer getPersonal(Long totalSpentValue, SocialStatus socialStatus) {
+        Integer pers = 0;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                rb.getString("discount.getpersonal"))) {
+            preparedStatement.setLong(1, totalSpentValue);
+            preparedStatement.setString(2, socialStatus.toString());
+            resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
                 pers += resultSet.getInt("personal");
@@ -61,7 +80,7 @@ public class JDBCDiscountDao implements DiscountDao {
     }
 
     @Override
-    public Discount findById(int id) {
+    public Discount findById(Long id) {
         return null;
     }
 
@@ -82,6 +101,12 @@ public class JDBCDiscountDao implements DiscountDao {
 
     @Override
     public void close() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
 
     }
 }
